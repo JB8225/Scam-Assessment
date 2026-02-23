@@ -374,6 +374,30 @@ function ResultsPage({ answers, onEmailSubmit }) {
         </div>
       )}
 
+      {/* Bridge — transition from info to action */}
+      <div style={{
+        margin: "24px 0 8px", padding: "22px 24px",
+        background: `linear-gradient(135deg, ${RED}10, ${WARNING_BG})`,
+        borderRadius: 12, borderLeft: `4px solid ${RED}`,
+      }}>
+        <p style={{
+          fontFamily: "'Libre Caslon Text', 'Georgia', serif", fontSize: 18, fontWeight: 700,
+          color: NAVY, margin: "0 0 10px 0",
+        }}>This is your situation. Now you need the playbook.</p>
+        <p style={{
+          fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: DARK_GRAY,
+          margin: "0 0 10px 0", lineHeight: 1.7,
+        }}>
+          What you just read is a snapshot — enough to understand where you stand, but not enough to protect yourself. You need the exact steps, in the exact order, right now.
+        </p>
+        <p style={{
+          fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: DARK_GRAY,
+          margin: 0, lineHeight: 1.7, fontWeight: 600,
+        }}>
+          Don't call your bank yet. Don't take any action yet. Get the Protocol first — because what you do in the next few hours matters, and the order you do it in matters even more.
+        </p>
+      </div>
+
       {/* Protocol tease - create the gap */}
       <div style={{
         margin: "24px 0", padding: "20px 22px",
@@ -482,10 +506,28 @@ export default function ScamEmergencyAssessment() {
     }, 300);
   };
 
-  const handleEmailSubmit = (email, allAnswers) => {
-    console.log("Email captured:", email);
-    console.log("Assessment answers:", allAnswers);
-    // Connect to your email service here (ConvertKit, Mailchimp, etc.)
+  const handleEmailSubmit = async (email, allAnswers) => {
+    try {
+      await fetch("https://services.leadconnectorhq.com/hooks/OI1J52iL4W67IzzVEN0Y/webhook-trigger/60142dd1-de6d-4e93-81a2-a4c7fc41ccdb", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        mode: "no-cors",
+        body: JSON.stringify({
+          email: email,
+          who_affected: allAnswers.who || "",
+          scam_type: allAnswers.situation || "",
+          feeling: allAnswers.feeling || "",
+          timing: allAnswers.timing || "",
+          locked_down: allAnswers.locked_down || "",
+          bank_contacted: allAnswers.bank_contact || "",
+          payment_method: allAnswers.payment || "",
+          amount: allAnswers.amount || "",
+          source: "scam-emergency-assessment",
+        }),
+      });
+    } catch (err) {
+      console.error("Webhook error:", err);
+    }
   };
 
   useEffect(() => {
