@@ -508,7 +508,7 @@ export default function ScamEmergencyAssessment() {
 
   const handleEmailSubmit = async (email, allAnswers) => {
     try {
-      await fetch("https://services.leadconnectorhq.com/hooks/OI1J52iL4W67IzzVEN0Y/webhook-trigger/ae4eed93-66f8-41e6-956b-959e9de26e77", {
+      await fetch("https://services.leadconnectorhq.com/hooks/OI1J52iL4W67IzzVEN0Y/webhook-trigger/cc34b41a-d268-4832-88b2-fd03ab4b03e3", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         mode: "no-cors",
